@@ -1,10 +1,10 @@
-const Categories = require("../models/categories");
+const { categories } = require("../models");
 
 module.exports = {
   createCategory: async (req, res) => {
     try {
       const { name } = req.body;
-      const category = await Categories.create({ name });
+      const category = await categories.create({ name });
       res.status(201).json(category);
     } catch (error) {
       res.status(500).json({ error: "Internal server error" });
@@ -13,8 +13,8 @@ module.exports = {
 
   getAllCategories: async (req, res) => {
     try {
-      const categories = await Categories.findAll();
-      res.status(200).json(categories);
+      const category = await categories.findAll();
+      res.status(200).json(category);
     } catch (error) {
       console.log(error);
       res.status(500).json({ error: "Internal server error" });
@@ -25,7 +25,7 @@ module.exports = {
     try {
       const { categoryId } = req.params;
       const { name } = req.body;
-      const category = await Categories.findByPk(categoryId);
+      const category = await categories.findByPk(categoryId);
       if (!category) {
         return res.status(404).json({ error: "Category not found" });
       }
@@ -40,7 +40,7 @@ module.exports = {
   deleteCategory: async (req, res) => {
     try {
       const { categoryId } = req.params;
-      const category = await Categories.findByPk(categoryId);
+      const category = await categories.findByPk(categoryId);
       if (!category) {
         return res.status(404).json({ error: "Category not found" });
       }
