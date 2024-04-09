@@ -2,7 +2,7 @@ const ServicePrice = require("./servicePrice");
 
 module.exports = (sequelize, DataTypes) => {
   let Service = sequelize.define("services", {
-    CategoryId: {
+    categoryId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     Type: {
       type: DataTypes.ENUM("Normal", "VIP"),
       allowNull: false,
+      defaultValue: "Normal",
     },
   });
   Service.hasMany(ServicePrice(sequelize, DataTypes), {

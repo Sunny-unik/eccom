@@ -1,22 +1,26 @@
-const Service = require("../models/services");
+const { services } = require("../models");
 
 module.exports = {
   addService: async (req, res) => {
     try {
       const { categoryId } = req.params;
-      const { name, price } = req.body;
-      const service = await Service.create({ name, price, categoryId });
+      const { name, type: Type } = req.body;
+      const service = await services.create({
+        ServiceName: name,
+        Type,
+        categoryId,
+      });
       res.status(201).json(service);
     } catch (error) {
-      res.status(500).json({ error: "Internal server error" });
+      res.status(500).send(error);
     }
   },
 
   getAllServices: async (req, res) => {
     try {
       const { categoryId } = req.params;
-      const services = await Service.findAll({ where: { categoryId } });
-      res.status(200).json(services);
+      const service = await services.findAll({ where: { categoryId } });
+      res.status(200).json(service);
     } catch (error) {
       res.status(500).json({ error: "Internal server error" });
     }
@@ -25,7 +29,7 @@ module.exports = {
   removeService: async (req, res) => {
     try {
       const { categoryId, serviceId } = req.params;
-      await Service.destroy({ where: { id: serviceId, categoryId } });
+      await services.destroy({ where: { id: serviceId, categoryId } });
       res.status(204).end();
     } catch (error) {
       res.status(500).json({ error: "Internal server error" });
@@ -36,7 +40,7 @@ module.exports = {
     try {
       const { categoryId, serviceId } = req.params;
       const { name, price } = req.body;
-      const service = await Service.findOne({
+      const service = await services.findOne({
         where: { id: serviceId, categoryId },
       });
       if (!service) {

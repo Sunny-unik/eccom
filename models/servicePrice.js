@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const ServicePrice = sequelize.define("ServicePrice", {
+  const ServicePrice = sequelize.define("servicePrice", {
     duration: {
       type: DataTypes.INTEGER,
       allowNull: false,
