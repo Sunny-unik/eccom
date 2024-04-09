@@ -1,9 +1,10 @@
-const { categories } = require("../models");
+const { categories, services } = require("../models");
 
 module.exports = {
   createCategory: async (req, res) => {
     try {
       const { name } = req.body;
+      if (!name) return res.status(400).send("name is required field");
       const category = await categories.create({ name });
       res.status(201).json(category);
     } catch (error) {
@@ -25,6 +26,7 @@ module.exports = {
     try {
       const { categoryId } = req.params;
       const { name } = req.body;
+      if (!name) return res.status(400).send("name is required field");
       const category = await categories.findByPk(categoryId);
       if (!category) {
         return res.status(404).json({ error: "Category not found" });
@@ -44,10 +46,10 @@ module.exports = {
       if (!category) {
         return res.status(404).json({ error: "Category not found" });
       }
-      const servicesCount = await Service.count({ where: { categoryId } });
+      const servicesCount = await services.count({ where: { categoryId } });
       if (servicesCount === 0) {
         await category.destroy();
-        res.status(204).end();
+        res.status(204).send("Specified category deleted");
       } else {
         res.status(400).json({ error: "Category is not empty" });
       }
